@@ -1,7 +1,8 @@
-import { Request, Response } from "express";
-import log from "../log";
-import { http } from "../constants/enum";
 import axios from "axios";
+import { Request, Response } from "express";
+import { http } from "../constants/enum";
+import log from "../log";
+import cache from "../services/cache";
 
 /* const jsonPlaceholder = axios.create({
     baseURL: "https://jsonplaceholder.typicode.com"
@@ -10,8 +11,11 @@ import axios from "axios";
 export const getAllPosts = async (_: Request, res: Response) => {
     try {
         const start = new Date().getTime();
-        // const allPosts = await jsonPlaceholder.get("/posts");
-        const allPosts = await axios.get("https://random-word-api.herokuapp.com/all");
+        const allWords = await cache.fetch("posts", async () => {
+            const res = await axios.get("https://random-word-api.herokuapp.com/all");
+            const allWords: Array<string> = res.data;
+            return allWords;
+        });
         const end = new Date().getTime();
         return res
             .status(http.status.SUCCESS)
@@ -20,7 +24,7 @@ export const getAllPosts = async (_: Request, res: Response) => {
                 profiling: {
                     time: end - start
                 },
-                data: allPosts.data
+                data: allWords
             });
     } catch (error: any) {
         log.error(error);
