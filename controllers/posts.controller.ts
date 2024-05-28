@@ -2,7 +2,7 @@ import axios from "axios";
 import { Request, Response } from "express";
 import { http } from "../constants/enum";
 import log from "../log";
-import cache from "../services/cache";
+import cache from "../cache";
 
 /* const jsonPlaceholder = axios.create({
     baseURL: "https://jsonplaceholder.typicode.com"

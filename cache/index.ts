@@ -1,5 +1,5 @@
 import { RedisClientType, createClient } from 'redis';
-import log from '../../log';
+import log from '../log';
 
 class Cache {
     private cache: RedisClientType;
